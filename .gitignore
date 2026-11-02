@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+learning.db
+Jira board ALS work items status - Claude.html
+Jira board ALS work items status - Claude_files/

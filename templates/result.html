@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Result</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="box">
+        <h2>{{ attempt['topic_name'] }} - Result</h2>
+        <div class="score">{{ attempt['score'] }} / {{ attempt['total'] }} ({{ percent }}%)</div>
+
+        {% for r in rows %}
+            <div class="card">
+                <p><b>{{ loop.index }}. {{ r['question'] }}</b></p>
+                {% if r['is_correct'] %}
+                    <p class="right">✔ Correct: {{ r['option_' ~ (r['correct_option']|lower)] }}</p>
+                {% else %}
+                    <p class="wrong">✘ Ungal answer:
+                        {% if r['selected_option'] %}{{ r['option_' ~ (r['selected_option']|lower)] }}{% else %}Answer pannala{% endif %}
+                    </p>
+                    <p class="right">✔ Correct answer: {{ r['option_' ~ (r['correct_option']|lower)] }}</p>
+                {% endif %}
+            </div>
+        {% endfor %}
+
+        <a class="btn" href="/quiz">Take another quiz</a>
+        <p><a href="/dashboard">Dashboard</a> | <a href="/profile">My Profile</a></p>
+    </div>
+</body>
+</html>

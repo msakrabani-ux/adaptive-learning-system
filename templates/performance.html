@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Performance</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
+        th, td { padding: 8px; border-bottom: 1px solid #ddd; text-align: center; }
+        th { background: #eff6ff; }
+        .Weak { color: #b91c1c; font-weight: bold; }
+        .Strong { color: #15803d; font-weight: bold; }
+        .Average { color: #b45309; font-weight: bold; }
+        .chart-box { margin: 25px 0; }
+        .chart-box h3 { text-align: center; color: #333; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>My Performance</h2>
+
+        {% if topic_stats %}
+            <table>
+                <tr>
+                    <th>Topic</th>
+                    <th>Attempts</th>
+                    <th>Correct / Total</th>
+                    <th>Accuracy</th>
+                    <th>Level</th>
+                </tr>
+                {% for s in topic_stats %}
+                <tr>
+                    <td>{{ s['topic'] }}</td>
+                    <td>{{ s['attempts'] }}</td>
+                    <td>{{ s['correct'] }} / {{ s['total'] }}</td>
+                    <td>{{ s['accuracy'] }}%</td>
+                    <td class="{{ s['level'] }}">{{ s['level'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            <p style="font-size:13px;color:#555;">
+                Weak: below 60% | Average: 60 to 79% | Strong: 80% and above
+            </p>
+
+            <div class="chart-box">
+                <h3>Topic-wise Accuracy</h3>
+                <canvas id="topicChart"></canvas>
+            </div>
+
+            <div class="chart-box">
+                <h3>Score Progress</h3>
+                <canvas id="progressChart"></canvas>
+            </div>
+
+            <script>
+                const topicLabels = {{ topic_labels | tojson }};
+                const topicAccuracy = {{ topic_accuracy | tojson }};
+                const historyLabels = {{ history_labels | tojson }};
+                const historyScores = {{ history_scores | tojson }};
+
+                // Accuracy-ku yetha color: Weak sivappu, Average orange, Strong pachai
+                const barColors = topicAccuracy.map(a =>
+                    a < 60 ? "#dc2626" : (a >= 80 ? "#16a34a" : "#f59e0b")
+                );
+
+                new Chart(document.getElementById("topicChart"), {
+                    type: "bar",
+                    data: {
+                        labels: topicLabels,
+                        datasets: [{
+                            label: "Accuracy (%)",
+                            data: topicAccuracy,
+                            backgroundColor: barColors
+                        }]
+                    },
+                    options: {
+                        scales: { y: { beginAtZero: true, max: 100 } },
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                new Chart(document.getElementById("progressChart"), {
+                    type: "line",
+                    data: {
+                        labels: historyLabels,
+                        datasets: [{
+                            label: "Score (%)",
+                            data: historyScores,
+                            borderColor: "#2563eb",
+                            backgroundColor: "#2563eb",
+                            tension: 0.3
+                        }]
+                    },
+                    options: {
+                        scales: { y: { beginAtZero: true, max: 100 } }
+                    }
+                });
+            </script>
+        {% else %}
+            <p>Innum quiz edukkala. Mudhalil oru quiz eduthu paarunga.</p>
+            <a class="btn" href="/quiz">Take a Quiz</a>
+        {% endif %}
+
+        <p><a href="/dashboard">Dashboard</a> | <a href="/quiz">Take a Quiz</a></p>
+    </div>
+</body>
+</html>

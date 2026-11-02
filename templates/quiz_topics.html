@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Choose Topic</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="box">
+        <h2>Choose a Topic</h2>
+        {% for m in get_flashed_messages() %}
+            <div class="msg">{{ m }}</div>
+        {% endfor %}
+        {% for t in topics %}
+            <a class="btn" href="/quiz/{{ t['id'] }}">{{ t['name'] }}</a>
+        {% endfor %}
+        <p><a href="/dashboard">Back to Dashboard</a></p>
+    </div>
+</body>
+</html>

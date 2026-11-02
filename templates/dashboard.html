@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <style>
+        .rec { border: 1px solid #ddd; border-left: 6px solid #999; border-radius: 8px; padding: 12px; margin: 12px 0; }
+        .rec.Weak { border-left-color: #dc2626; }
+        .rec.Average { border-left-color: #f59e0b; }
+        .rec.Strong { border-left-color: #16a34a; }
+        .rec.New { border-left-color: #2563eb; }
+        .rec h4 { margin: 0 0 6px 0; }
+        .rec p { margin: 4px 0; font-size: 14px; color: #444; }
+        .tag { font-size: 12px; background: #eff6ff; color: #2563eb; padding: 2px 8px; border-radius: 10px; }
+        .links { text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Welcome, {{ name }}! 👋</h2>
+
+        <h3>Recommended for you</h3>
+        {% for r in recs[:3] %}
+            <div class="rec {{ r['level'] }}">
+                <h4>{{ r['topic'] }} <span class="tag">{{ r['level'] }}</span> <span class="tag">{{ r['difficulty'] }}</span></h4>
+                <p>{{ r['reason'] }}</p>
+                <a href="/quiz/{{ r['topic_id'] }}?difficulty={{ r['difficulty'] }}">Start {{ r['topic'] }} quiz ({{ r['difficulty'] }})</a>
+            </div>
+        {% endfor %}
+
+        <div class="links">
+            <a href="/quiz">Take a Quiz</a> |
+            <a href="/performance">My Performance</a> |
+            <a href="/profile">My Profile</a> |
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</body>
+</html>

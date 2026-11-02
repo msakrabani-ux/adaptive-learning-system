@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ topic['name'] }} Quiz</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="box">
+        <h2>{{ topic['name'] }} Quiz</h2>
+                {% if difficulty %}
+            <p style="text-align:center;color:#2563eb;">Difficulty focus: {{ difficulty }}</p>
+        {% endif %}
+        <form method="POST">
+            {% for q in questions %}
+                <div class="q">
+                    <input type="hidden" name="qid" value="{{ q['id'] }}">
+                    <p>{{ loop.index }}. {{ q['question'] }}</p>
+                    <label class="opt"><input type="radio" name="q_{{ q['id'] }}" value="A"> {{ q['option_a'] }}</label>
+                    <label class="opt"><input type="radio" name="q_{{ q['id'] }}" value="B"> {{ q['option_b'] }}</label>
+                    <label class="opt"><input type="radio" name="q_{{ q['id'] }}" value="C"> {{ q['option_c'] }}</label>
+                    <label class="opt"><input type="radio" name="q_{{ q['id'] }}" value="D"> {{ q['option_d'] }}</label>
+                </div>
+            {% endfor %}
+            <button type="submit">Submit Quiz</button>
+        </form>
+    </div>
+</body>
+</html>

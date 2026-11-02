@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f0f4f8; padding: 40px; }
+        .box { background: white; padding: 30px; border-radius: 10px; max-width: 450px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .row { margin: 8px 0; color: #444; }
+        .stats { display: flex; gap: 10px; margin: 20px 0; }
+        .stat { flex: 1; background: #eff6ff; padding: 12px; border-radius: 8px; text-align: center; }
+        .stat b { display: block; font-size: 22px; color: #2563eb; }
+        input, select { width: 100%; padding: 10px; margin: 6px 0; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 10px; background: #2563eb; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .msg { background: #fef3c7; padding: 8px; border-radius: 5px; margin-bottom: 10px; font-size: 14px; }
+        a { color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>My Profile</h2>
+        {% for m in get_flashed_messages() %}
+            <div class="msg">{{ m }}</div>
+        {% endfor %}
+
+        <div class="row"><b>Name:</b> {{ user["name"] }}</div>
+        <div class="row"><b>Email:</b> {{ user["email"] }}</div>
+        <div class="row"><b>Department:</b> {{ details["department"] if details else "Not set" }}</div>
+        <div class="row"><b>Year:</b> {{ details["year"] if details else "Not set" }}</div>
+
+        <div class="stats">
+            <div class="stat"><b>{{ total_quizzes }}</b>Quizzes taken</div>
+            <div class="stat"><b>{{ avg_score }}%</b>Average score</div>
+        </div>
+
+        <h3>Edit details</h3>
+        <form method="POST">
+            <input type="text" name="department" placeholder="Department (e.g. IT)"
+                   value="{{ details['department'] if details else '' }}" required>
+            <select name="year" required>
+                {% for y in [1, 2, 3, 4] %}
+                    <option value="{{ y }}" {% if details and details["year"] == y %}selected{% endif %}>Year {{ y }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Save</button>
+        </form>
+        <p><a href="/dashboard">Back to Dashboard</a> | <a href="/logout">Logout</a></p>
+    </div>
+</body>
+</html>
